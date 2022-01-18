@@ -177,7 +177,7 @@
             rpcUrl: configCopy.ethereumNode
           }));
         } else {
-          Web3Service.web3 = new MultisigWeb3(new MultisigWeb3.providers.HttpProvider(configCopy.ethereumNode));
+          Web3Service.web3 = new Web3(new Web3.providers.HttpProvider(configCopy.ethereumNode));
         }
 
         if (Web3Service.engine) {

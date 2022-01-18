@@ -99,7 +99,7 @@
           }
           // injected web3 provider (Metamask, mist, etc)
           else if (txDefault.wallet == "injected" && web3 && !isElectron) {
-            factory.web3 = web3.currentProvider !== undefined ? new MultisigWeb3(web3.currentProvider) : new MultisigWeb3(web3);
+            factory.web3 = web3.currentProvider !== undefined ? new Web3(web3.currentProvider) : new Web3(web3);
             // Set accounts
             // Convert to checksummed addresses
             factory.accounts = factory.toChecksumAddress(factory.web3.eth.accounts);
@@ -117,10 +117,10 @@
           }
           else if (txDefault.wallet == 'remotenode') {
             // Connect to Ethereum Node
-            // factory.web3 = new MultisigWeb3(new RpcSubprovider({
+            // factory.web3 = new Web3(new RpcSubprovider({
             //   rpcUrl: txDefault.ethereumNode
             // }));
-            factory.web3 = new MultisigWeb3(new MultisigWeb3.providers.HttpProvider(txDefault.ethereumNode));
+            factory.web3 = new Web3(new Web3.providers.HttpProvider(txDefault.ethereumNode));
             // Check connection
             factory.web3.net.getListening(function (e) {
               if (e) {
@@ -450,7 +450,7 @@
         /* Ledger wallet electron setup */
         factory.ledgerElectronSetup = function () {
           factory.engine = new ProviderEngine();
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
 
           var web3Provider = new HookedWalletSubprovider({
             getAccounts: function (cb) {
@@ -503,7 +503,7 @@
             }
           });
 
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
 
           factory.engine.addProvider(web3Provider);
 
@@ -519,7 +519,7 @@
         /* Trezor setup */
         factory.trezorSetup = function () {
           factory.engine = new ProviderEngine();
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
 
           var web3Provider = new HookedWalletSubprovider({
             getAccounts: function (cb) {
@@ -578,7 +578,7 @@
             }
           });
 
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
 
           factory.engine.addProvider(web3Provider);
 
@@ -684,7 +684,7 @@
           web3Provider.host = txDefault.ethereumNode;
           // Setup engine
           factory.engine = new ProviderEngine();
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
           // Add providers
           factory.engine.addProvider(web3Provider);
           factory.engine.addProvider(new RpcSubprovider({
@@ -902,7 +902,7 @@
         */
         function _startupSetup() {
           factory.engine = new ProviderEngine();
-          factory.web3 = new MultisigWeb3(factory.engine);
+          factory.web3 = new Web3(factory.engine);
           if (factory.getKeystore()) {
             factory.engine.addProvider(new RpcSubprovider({
               rpcUrl: txDefault.ethereumNode
