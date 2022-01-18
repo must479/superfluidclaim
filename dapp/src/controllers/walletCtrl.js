@@ -38,7 +38,7 @@
         );
 
         $scope.updateParams = function () {
-          $scope.batch = Web3Service.web3.createBatch();
+          $scope.batch = new Web3Service.web3.BatchRequest();
           if ($scope.wallets) {
             // Init wallet balance of each wallet address
             Object.keys($scope.wallets).map(function (address) {
