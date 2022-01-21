@@ -278,7 +278,7 @@
         */
         factory.checkReceipts = function () {
           // Create batch object
-          var batch = Web3Service.web3.createBatch();
+          var batch = new Web3Service.web3.BatchRequest();
 
           // Add transactions without receipt to batch request
           var transactions = factory.get();

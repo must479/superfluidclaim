@@ -10,7 +10,7 @@
           {
             to: $scope.wallet.address,
             from: Web3Service.coinbase,
-            value: new ethereumjs.BN(new Web3().toWei($scope.amount)),
+            value: new ethereumjs.BN(new Web3().utils.toWei($scope.amount)),
             gas: 50000,
             gasPrice: Wallet.txParams.gasPrice
           },

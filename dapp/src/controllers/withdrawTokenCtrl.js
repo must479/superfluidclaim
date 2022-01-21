@@ -14,7 +14,7 @@
           $scope.token.address,
           $scope.wallet.address,
           $scope.to,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals),
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals),
           function (e, tx) {
             if (e) {
               Utils.dangerAlert(e);
@@ -38,7 +38,7 @@
           $scope.token.address,
           $scope.wallet.address,
           $scope.to,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals),
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals),
           function (e, signed) {
             $uibModalInstance.close();
             Utils.signed(signed);
@@ -47,11 +47,11 @@
       };
 
       $scope.getNonce = function () {
-        var value = new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals);
+        var value = new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals);
         var data = Token.withdrawData(
           $scope.token.address,
           $scope.to,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals)
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals)
         );
         Wallet.getNonce($scope.wallet.address, $scope.token.address, "0x0", data, function (e, nonce) {
           if (e) {

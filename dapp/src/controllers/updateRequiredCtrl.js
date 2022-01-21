@@ -2,15 +2,16 @@
   function () {
     angular
     .module("multiSigWeb")
-    .controller("updateRequiredCtrl", function ($scope, Wallet, Transaction, Utils, $uibModalInstance, wallet) {
+    .controller("updateRequiredCtrl", async function ($scope, Wallet, Transaction, Utils, $uibModalInstance, wallet) {
       $scope.address = wallet.address;
 
-
-      Wallet
-      .getRequired($scope.address, function (e, required) {
-        $scope.required = required.toNumber();
-        $scope.$apply();
-      }).call();
+      const required = await Wallet.getRequired(
+        $scope.address,
+        function () {},
+        false
+      ).call();
+      $scope.required = Number(required);
+      $scope.$apply();
 
 
       $scope.update = function () {

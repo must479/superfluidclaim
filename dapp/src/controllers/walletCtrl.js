@@ -59,7 +59,7 @@
                 Wallet.getRequired(
                   address,
                   function (e, confirmations) {
-                    if ($scope.wallets[address] && confirmations && confirmations.greaterThan(0)) {
+                    if ($scope.wallets[address] && confirmations && confirmations > 0) {
                       $scope.$apply(function () {
                         $scope.wallets[address].confirmations = confirmations;
                       });

@@ -2,19 +2,20 @@
   function () {
     angular
     .module("multiSigWeb")
-    .controller("setLimitCtrl", function ($scope, $uibModalInstance, Utils, Transaction, wallet, Wallet) {
+    .controller("setLimitCtrl", async function ($scope, $uibModalInstance, Utils, Transaction, wallet, Wallet) {
+      const toBN = (num) => new Web3().utils.toBN(num);
       $scope.address = wallet.address;
 
-      Wallet
-      .getLimit($scope.address, function (e, required) {
-        if (required ) {
-          $scope.limit = required.div('1e18').toNumber();
-          $scope.$apply();
-        }
-      }).call();
+      const limit = await Wallet
+      .getLimit($scope.address, function () {
+      }, false).call();
+      if (limit) {
+        $scope.limit = toBN(limit).div(toBN(1e18)).toNumber();
+        $scope.$apply();
+      }
 
       $scope.setLimit = function () {
-        Wallet.updateLimit($scope.address, new Web3().toBigNumber($scope.limit).mul('1e18'), {onlySimulate: false}, function (e, tx){
+        Wallet.updateLimit($scope.address, toBN($scope.limit).mul('1e18'), {onlySimulate: false}, function (e, tx){
           if (e) {
             Utils.dangerAlert(e);
           }
@@ -29,7 +30,7 @@
       };
 
       $scope.sign = function () {
-        Wallet.signLimit($scope.address, new Web3().toBigNumber($scope.limit).mul('1e18'), function (e, tx) {
+        Wallet.signLimit($scope.address, toBN($scope.limit).mul('1e18'), function (e, tx) {
           if (e) {
             Utils.dangerAlert(e);
           }
@@ -41,7 +42,7 @@
       };
 
       $scope.getNonce = function () {
-        var data = Wallet.getUpdateLimitData($scope.address, new Web3().toBigNumber($scope.limit).mul('1e18'));
+        var data = Wallet.getUpdateLimitData($scope.address, toBN($scope.limit).mul('1e18'));
         Wallet.getNonce($scope.address, $scope.address, "0x0", data, function (e, nonce) {
           // Open modal
           $uibModalInstance.close();

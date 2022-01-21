@@ -8,36 +8,36 @@
       factory.abi = abiJSON.token.abi;
 
       factory.balanceOf = function (address, owner, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(address);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, address);
         return Wallet.callRequest(
-          instance.balanceOf,
+          instance.methods.balanceOf,
           [owner],
           cb
         );
       };
 
       factory.name = function (address, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(address);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, address);
         return Wallet.callRequest(
-          instance.name,
+          instance.methods.name,
           [],
           cb
         );
       };
 
       factory.symbol = function (address, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(address);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, address);
         return Wallet.callRequest(
-          instance.symbol,
+          instance.methods.symbol,
           [],
           cb
         );
       };
 
       factory.decimals = function (address, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(address);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, address);
         return Wallet.callRequest(
-          instance.decimals,
+          instance.methods.decimals,
           [],
           cb
         );
@@ -46,7 +46,7 @@
       factory.transfer = function (tokenAddress, to, value, options, cb) {
         var instance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
         Web3Service.sendTransaction(
-          instance.transfer,
+          instance.methods.transfer,
           [
             to,
             value,
@@ -61,7 +61,7 @@
 
       factory.transferOffline = function (tokenAddress, to, value, cb) {
         var instance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
-        var data = instance.transfer.getData(to, value);
+        var data = instance.methods.transfer.getData(to, value);
 
         Wallet.getUserNonce(function (e, nonce) {
           if (e) {
@@ -77,7 +77,7 @@
       factory.withdraw = function (tokenAddress, wallet, to, value, options, cb) {
         var walletInstance = Web3Service.web3.eth.contract(Wallet.json.multiSigDailyLimit.abi).at(wallet);
         var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
-        var data = tokenInstance.transfer.getData(
+        var data = tokenInstance.methods.transfer.getData(
           to,
           value
         );
@@ -89,7 +89,7 @@
           else {
         
             Web3Service.configureGas(Wallet.txDefaults({gas: 500000}), function (gasOptions){
-              walletInstance.submitTransaction(
+              walletInstance.methods.submitTransaction(
                 tokenAddress, 
                 "0x0", 
                 data, 
@@ -108,7 +108,7 @@
       factory.withdrawOffline = function (tokenAddress, wallet, to, value, cb) {
         var walletInstance = Web3Service.web3.eth.contract(Wallet.json.multiSigDailyLimit.abi).at(wallet);
         var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
-        var data = tokenInstance.transfer.getData(
+        var data = tokenInstance.methods.transfer.getData(
           to,
           value
         );
@@ -119,7 +119,7 @@
             cb(e);
           }
           else {
-            var mainData = walletInstance.submitTransaction.getData(tokenAddress, "0x0", data);
+            var mainData = walletInstance.methods.submitTransaction.getData(tokenAddress, "0x0", data);
             Wallet.offlineTransaction(wallet, mainData, nonce, cb);
           }
         });
@@ -127,7 +127,7 @@
 
       factory.withdrawData = function (tokenAddress, to, value) {
         var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
-        return tokenInstance.transfer.getData(
+        return tokenInstance.methods.transfer.getData(
           to,
           value
         );

@@ -111,7 +111,7 @@ describe('Wallet Service', function(){
             method.sendTransaction.apply(method.sendTransaction, params.concat(cb));
           });
 
-          walletService.deployWithLimit(accounts, 1, new Web3().toBigNumber(1).mul('1e18'),
+          walletService.deployWithLimit(accounts, 1, new Web3().utils.toBN(1).mul('1e18'),
             function (e, r) {
               if (r.address) {
                 console.log("[Karma] beforeEach, create EVM snapshot");
@@ -220,7 +220,7 @@ describe('Wallet Service', function(){
       {
         to: walletAddress,
         from: accounts[0],
-        value: web3.toBigNumber(1)
+        value: web3.utils.toBN(1)
       },
       function (e, tx) {
         expect(e).toBe(null);
@@ -240,7 +240,7 @@ describe('Wallet Service', function(){
 
   it('Deploy wallet by factory contract', function (done) {
 
-    walletService.deployWithLimitFactory(accounts, 1, new Web3().toBigNumber(1).mul('1e18'), function (e, tx) {
+    walletService.deployWithLimitFactory(accounts, 1, new Web3().utils.toBN(1).mul('1e18'), function (e, tx) {
       expect(e).toBe(null);
       expect(typeof(tx)).toBe('string');
       var res = web3.eth.getTransaction(tx);
@@ -268,15 +268,15 @@ describe('Wallet Service', function(){
     web3.eth.sendTransaction({
         to: walletAddress,
         from: accounts[0],
-        value: web3.toBigNumber(10)
+        value: web3.utils.toBN(10)
     });
 
 
-    walletService.updateLimit(walletAddress, new Web3().toBigNumber(2).mul('1e18'), {}, function (e, r){ //.mul('1e18')
+    walletService.updateLimit(walletAddress, new Web3().utils.toBN(2).mul('1e18'), {}, function (e, r){ //.mul('1e18')
       if(e){console.log(e.message);}
 
       var withdrawTx = {};
-      withdrawTx.value = new Web3().toBigNumber(1);
+      withdrawTx.value = new Web3().utils.toBN(1);
       withdrawTx.to = accounts[0];
       withdrawTx.data = '0x0';
 
@@ -298,7 +298,7 @@ describe('Wallet Service', function(){
               expect(response.eq(9)).toEqual(true);
 
               // Withdraw again
-              withdrawTx.value = new Web3().toBigNumber(2).mul('1e18');
+              withdrawTx.value = new Web3().utils.toBN(2).mul('1e18');
 
               walletService.submitTransaction(
                 walletAddress,
@@ -357,7 +357,7 @@ describe('Wallet Service', function(){
 
   it('Add owner', function (done) {
     // Deploy new wallet with 1 owner
-    walletService.deployWithLimit([accounts[0]], 1, new Web3().toBigNumber(0).mul('1e18'),
+    walletService.deployWithLimit([accounts[0]], 1, new Web3().utils.toBN(0).mul('1e18'),
       function (e, r) {
         expect(e).toBe(null);
 
@@ -390,7 +390,7 @@ describe('Wallet Service', function(){
 
   it('Remove owner', function (done) {
     // Deploy new wallet with 1 owner
-    walletService.deployWithLimit(accounts, 1, new Web3().toBigNumber(0).mul('1e18'),
+    walletService.deployWithLimit(accounts, 1, new Web3().utils.toBN(0).mul('1e18'),
       function (e, r) {
         expect(e).toBe(null);
 
@@ -419,7 +419,7 @@ describe('Wallet Service', function(){
 
   it('Replace owner', function (done) {
     // Deploy new wallet with 1 owner and then replace it with another one
-    walletService.deployWithLimit([accounts[0]], 1, new Web3().toBigNumber(0).mul('1e18'),
+    walletService.deployWithLimit([accounts[0]], 1, new Web3().utils.toBN(0).mul('1e18'),
       function (e, r) {
         expect(e).toBe(null);
         if (r.address) {

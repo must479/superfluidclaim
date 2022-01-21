@@ -112,7 +112,7 @@
             }
           });
         }
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
         Wallet.submitTransaction(
           $scope.wallet.address,
           tx,
@@ -165,7 +165,7 @@
             }
           });
         }
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
         Wallet.submitTransaction(
           $scope.wallet.address,
           tx,
@@ -202,7 +202,7 @@
             }
           });
         }
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
         Wallet.signTransaction(
           $scope.wallet.address,
           tx,
@@ -222,7 +222,7 @@
       };
 
       $scope.getNonce = function () {
-        $scope.tx.value = "0x" + new Web3().toBigNumber($scope.tx.value).mul('1e18').toString(16);
+        $scope.tx.value = "0x" + new Web3().utils.toBN($scope.tx.value).mul('1e18').toString(16);
         if ($scope.abiArray) {
           var instance = Web3Service.web3.eth.contract($scope.abiArray).at($scope.tx.to);
           $scope.data = instance[$scope.method.name].getData.apply(this, $scope.params);

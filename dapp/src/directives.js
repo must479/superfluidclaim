@@ -40,7 +40,7 @@
               function () {
                 return scope.wallet.maxWithdraw;
               },
-              function () {
+              async function () {
                 // Wallet.initParams().then(
                 //   function () {
                     if (scope.wallet && scope.wallet.isOnChain == true) {
@@ -48,17 +48,15 @@
                     }
                     else if (attrs.disabledIfNoAccountsOrWalletAvailable) {
                       var address = attrs.disabledIfNoAccountsOrWalletAvailable;
-                      Wallet.getOwners(
+                      const owners = await Wallet.getOwners(
                         address,
-                        function (e, owners) {
-                          if (!e && owners.length > 0 && Web3Service.coinbase) {
-                            element.removeAttr('disabled');
-                          }
-                          else {
-                            attrs.$set('disabled', 'disabled');
-                          }
-                        }
-                      ).call();
+                        function (e, owners) {},false).call();
+                      if (!e && owners.length > 0 && Web3Service.coinbase) {
+                        element.removeAttr('disabled');
+                      }
+                      else {
+                        attrs.$set('disabled', 'disabled');
+                      }
                     }
                     else {
                       scope.$watch(function () {
@@ -113,7 +111,7 @@
             },
               function () {
                 var address = Object.assign({}, txDefault, JSON.parse(localStorage.getItem("userConfig"))).walletFactoryAddress;
-                if (address && Web3Service.web3.isAddress(address)) {
+                if (address && Web3Service.web3.utils.isAddress(address)) {
                   Web3Service.web3.eth.getCode(address, function (e, factory) {
                     if (!Connection.isConnected) {
                       element.css("display", "none");
@@ -422,8 +420,8 @@
                   isAddressValid = false;
                 }
                 // https://web3js.readthedocs.io/en/1.0/web3-utils.html#isaddress
-                else if (Web3Service.web3.isAddress(attrs.disabledIfInvalidAddress)
-                  || Web3Service.web3.isAddress(Web3Service.toChecksumAddress(attrs.disabledIfInvalidAddress))) {
+                else if (Web3Service.web3.utils.isAddress(attrs.disabledIfInvalidAddress)
+                  || Web3Service.web3.utils.isAddress(Web3Service.toChecksumAddress(attrs.disabledIfInvalidAddress))) {
                   // Address valid (0x0........)
                   isAddressValid = true;
                 }

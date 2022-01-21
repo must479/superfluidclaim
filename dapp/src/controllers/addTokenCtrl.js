@@ -21,7 +21,7 @@
 
       // Refresh token info when address changes
       $scope.updateInfo = function () {
-        var batchInfo = Web3Service.web3.createBatch();
+        var batchInfo = new Web3Service.web3.BatchRequest();
 
         batchInfo.add(
           Token.name(

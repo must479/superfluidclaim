@@ -48,7 +48,7 @@
             /**
              * Execute `addAddress` flow
              */
-            $scope.ok = function () {
+            $scope.ok = async function () {
               // Check whether it is a contract, a token or a EOA
               var checksumAddress;
               try {
@@ -56,8 +56,7 @@
               } catch (error) {
                 Utils.dangerAlert(error);
               }
-
-              if (!Web3Service.web3.isAddress($scope.book.address)) {
+              if (!Web3Service.web3.utils.isAddress($scope.book.address)) {
                 // Show alert
                 Utils.dangerAlert("Invalid Ethereum Address");
                 return;
@@ -66,14 +65,14 @@
               $scope.book.address = checksumAddress;
 
               // Get multisig instance from specified address
-              var multisigInstance = Web3Service.web3.eth.contract(Wallet.json.multiSigDailyLimit.abi).at($scope.book.address);
+              var multisigInstance = new Web3Service.web3.eth.Contract(Wallet.json.multiSigDailyLimit.abi, $scope.book.address);
               // Look for MAX_OWNER_COUNT property in Multisig contract,
               // it will be > 0 if the address corresponds to a real Multisig instance
-              multisigInstance.MAX_OWNER_COUNT(function (e, count) {
-                if (e) {
-                  Utils.dangerAlert(e);
-                  $uibModalInstance.close();
-                } else if (count && count.gt(0)) {
+              try {
+                const code = await Web3Service.web3.eth.getCode($scope.book.address);
+                const isEOA = code === "0x";
+                const count = isEOA ? null : await multisigInstance.methods.MAX_OWNER_COUNT().call();
+                if (count && count > 0) {
                   // it is a multisig
                   $scope.book.type = types.multisig;
                   $scope.addToBook($scope.book);
@@ -99,8 +98,10 @@
 
                   });
                 }
-
-              });
+              } catch (err) {
+                Utils.dangerAlert(err);
+                $uibModalInstance.close();
+              }
             };
 
             $scope.cancel = function () {

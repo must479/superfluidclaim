@@ -77,7 +77,7 @@
             }
           });
         }
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
         tx.from = Web3Service.coinbase;
         // if method, use contract instance method
         if ($scope.method && $scope.method.index !== undefined && $scope.method.index !== "") {
@@ -143,7 +143,7 @@
             }
           });
         }
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
         tx.from = Web3Service.coinbase;
         tx.gas = 21000;
         
@@ -175,7 +175,7 @@
       };
 
       $scope.signOff = function () {
-        $scope.tx.value = "0x" + new Web3().toBigNumber($scope.tx.value).mul('1e18').toString(16);
+        $scope.tx.value = "0x" + new Web3().utils.toBN($scope.tx.value).mul('1e18').toString(16);
         $scope.tx.from = Web3Service.coinbase;
         var params = [];
         Object.assign(params, $scope.params);

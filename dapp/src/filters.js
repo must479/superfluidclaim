@@ -31,7 +31,7 @@
     })
     .filter('bigNumber', function () {
       return function (big) {
-        return new Web3().toBigNumber(big).toNumber();        
+        return big ? new Web3().utils.toBN(big).toNumber() : 0;
       };
     })
     .filter('txData', function () {
@@ -75,7 +75,7 @@
             return log.toString().slice(0, 7);
           }
           else{
-            return new Web3().toBigNumber(log).toExponential(3);
+            return new Web3().utils.toBN(log).toExponential(3);
           }
         }
         else {
@@ -86,14 +86,14 @@
     .filter('ether', function () {
       return function (num) {
         if (num) {
-          var casted = new Web3().toBigNumber(num);
+          var casted = new Web3().utils.toBN(num);
           if (casted.gt(0)) {
-            var ether = casted.div('1e18');
-            if (ether.gt(1)) {
-              return ether.toPrecision(Math.floor(Math.log(ether.toNumber())/Math.log(10) + 3)).toString(10) + " ETH";
+            var ether = casted.div(new Web3().utils.toBN(1e18));
+            if (ether.gt(new Web3().utils.toBN(1))) {
+              return ether.toString() + " ETH";
             }
             else {
-              return ether.toPrecision(2).toString() + " ETH";
+              return ether.toString() + " ETH";
             }
 
           }
@@ -111,7 +111,7 @@
           if(token.decimals === undefined){
             decimals = 18;
           }
-          var string_split = new Web3().toBigNumber(token.balance).div("1e" + decimals).toString(10).split('.');
+          var string_split = new Web3().utils.toBN(token.balance).div("1e" + decimals).toString(10).split('.');
           var new_string = "";
           var places = string_split[0].length - 1;
           for (var i=places; i>=0; i--) {

@@ -10,7 +10,7 @@
         Token.transfer(
           $scope.token.address,
           $scope.wallet.address,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals),
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals),
           {onlySimulate: false},
           function(e, tx){
             if (e) {
@@ -34,7 +34,7 @@
         Token.transfer(
           $scope.token.address,
           $scope.wallet.address,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals),
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals),
           {onlySimulate: true},
           function(e, tx){
             if (e) {
@@ -51,7 +51,7 @@
         Token.transferOffline(
           $scope.token.address,
           $scope.wallet.address,
-          new Web3().toBigNumber($scope.amount).mul('1e' + $scope.token.decimals),
+          new Web3().utils.toBN($scope.amount).mul('1e' + $scope.token.decimals),
           function(e, signed){
             if (e) {
               Utils.dangerAlert(e);

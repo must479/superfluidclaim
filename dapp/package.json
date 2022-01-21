@@ -79,7 +79,7 @@
     "ngclipboard": "1.1.1",
     "spinkit": "1.2.5",
     "web3": "latest",
-    "web3-provider-engine": "git+https://github.com/denisgranha/provider-engine.git#compiled-subprovider"
+    "web3-provider-engine": "latest"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8",

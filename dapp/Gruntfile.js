@@ -140,12 +140,12 @@ module.exports = function(grunt) {
     const fontsStandaloneDirPath = path.resolve(__dirname, 'src/bundles/fonts');
 
     const modules = [
+      'node_modules/angular/angular.min.js',
       'node_modules/web3/dist/web3.min.js',
-      'node_modules/web3-provider-engine/dist/HookedWalletSubprovider.js',
-      'node_modules/web3-provider-engine/dist/RpcSubprovider.js',
+      // 'node_modules/web3-provider-engine/subproviders/hooked-wallet.js',
+      // 'node_modules/web3-provider-engine/subproviders/rpc.js',
       'node_modules/web3-provider-engine/dist/ProviderEngine.js',
       'node_modules/browser-builds/dist/ethereumjs-tx/ethereumjs-tx-1.3.3.min.js',
-      'node_modules/angular/angular.min.js',
       'node_modules/angular-animate/angular-animate.min.js',
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',

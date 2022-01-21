@@ -18,7 +18,7 @@
       $scope.send = function () {
         var tx = {};
         Object.assign(tx, $scope.tx);
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
 
         Wallet.submitTransaction(
           $scope.wallet.address,
@@ -50,7 +50,7 @@
       $scope.signOff = function () {
         var tx = {};
         Object.assign(tx, $scope.tx);
-        tx.value = new Web3().toBigNumber($scope.tx.value).mul('1e18');
+        tx.value = new Web3().utils.toBN($scope.tx.value).mul('1e18');
 
         Wallet.signTransaction(
           $scope.wallet.address,
