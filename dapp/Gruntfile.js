@@ -127,7 +127,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-npm-command');
 
   grunt.registerTask('default', ['ngtemplates', 'http-server']);
-  grunt.registerTask('ledger', ['ssl-cert', 'ngtemplates', 'http-server:ssl']);
+  // grunt.registerTask('ledger', ['ssl-cert', 'ngtemplates', 'http-server:ssl']);
   grunt.registerTask('bundle', '', function () {
     // Command: `npx grunt bundle` or `npx grunt bundle --mode=electron`
     const fs = require('fs');
@@ -146,6 +146,7 @@ module.exports = function(grunt) {
 
     const modules = [
       'node_modules/web3/dist/web3.min.js',
+      'node_modules/ethers/dist/ethers.umd.min.js',
       'node_modules/web3-provider-engine/dist/HookedWalletSubprovider.js',
       'node_modules/web3-provider-engine/dist/RpcSubprovider.js',
       'node_modules/web3-provider-engine/dist/ProviderEngine.js',
@@ -167,7 +168,7 @@ module.exports = function(grunt) {
     ];
 
     const webOnlyModules = [
-      'node_modules/ledger-wallet-provider/dist/ledgerwallet.js'
+      // 'node_modules/ledger-wallet-provider/dist/ledgerwallet.js'
     ];
 
     const standaloneLibs = [

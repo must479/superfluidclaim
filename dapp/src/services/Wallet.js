@@ -1147,24 +1147,19 @@
       /**
       * Confirm transaction by another wallet owner
       */
-      wallet.confirmTransaction = function (address, txId, options, cb) {
-        var instance = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi).at(address);
-        instance.confirmTransaction.estimateGas(txId, wallet.txDefaults(), function (e, gas){
-          if (e) {
-            cb(e);
-          }
-          else {
-            Web3Service.sendTransaction(
-              instance.confirmTransaction,
-              [
-                txId,
-                wallet.txDefaults({gas: Math.ceil(gas * 1.5)})
-              ],
-              options,
-              cb
-            );
-          }
-        });
+      wallet.confirmTransaction = async function (address, txId, options, cb) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(address, wallet.json.multiSigDailyLimit.abi, signer);
+        try {
+          const txn = await contract.confirmTransaction(txId);
+          const receipt = await txn.wait();
+          console.log(receipt);
+          cb(null, receipt.hash);
+        } catch (err) {
+          console.error(err);
+          cb(err);
+        }
       };
 
       /**
