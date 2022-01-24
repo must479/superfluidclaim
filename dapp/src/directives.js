@@ -48,13 +48,17 @@
                     }
                     else if (attrs.disabledIfNoAccountsOrWalletAvailable) {
                       var address = attrs.disabledIfNoAccountsOrWalletAvailable;
-                      const owners = await Wallet.getOwners(
-                        address,
-                        function (e, owners) {},false).call();
-                      if (!e && owners.length > 0 && Web3Service.coinbase) {
-                        element.removeAttr('disabled');
-                      }
-                      else {
+                      try {
+                        const owners = await Wallet.getOwners(
+                          address,
+                          function (e, owners) {}, false).call();
+                        if (owners.length > 0 && Web3Service.coinbase) {
+                          element.removeAttr('disabled');
+                        }
+                        else {
+                          attrs.$set('disabled', 'disabled');
+                        }
+                      } catch (err) {
                         attrs.$set('disabled', 'disabled');
                       }
                     }

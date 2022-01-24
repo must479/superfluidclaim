@@ -193,7 +193,7 @@
         factory.signMethodOffline = function (tx, abi, method, params, cb) {
 
           // Get data
-          var instance = Web3Service.web3.eth.contract(abi).at(tx.to);
+          var instance = new Web3Service.web3.eth.Contract(abi, tx.to);
 
           tx.data = instance[method].getData.apply(this, params);
 
@@ -206,7 +206,7 @@
         */
         factory.sendMethod = function (tx, abi, method, params, cb) {
           // Instance contract
-          var instance = Web3Service.web3.eth.contract(abi).at(tx.to);
+          var instance = new Web3Service.web3.eth.Contract(abi, tx.to);
           var transactionParams = params.slice();
           transactionParams.push(tx);
 
@@ -240,7 +240,7 @@
 
         factory.simulateMethod = function (tx, abi, method, params, cb) {
           // Instance contract
-          var instance = Web3Service.web3.eth.contract(abi).at(tx.to);
+          var instance = new Web3Service.web3.eth.Contract(abi, tx.to);
           var options = Object.assign({ onlySimulate: true }, tx);
 
           try {

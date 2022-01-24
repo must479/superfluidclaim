@@ -58,7 +58,7 @@
 
         $scope.updateParams = function () {
 
-          var batch = Web3Service.web3.createBatch();
+          var batch = new Web3Service.web3.BatchRequest();
 
           $scope.showExecuted = true;
           $scope.showPending = true;
@@ -174,30 +174,26 @@
                 function (token) {
 
                   // Get multisig balance
-                  batch.add(
-                    Token.balanceOf(
-                      token,
-                      $scope.wallet.address,
-                      function (e, balance) {
-                        if ($scope.wallet.tokens[token]) {
-                          $scope.wallet.tokens[token].balance = balance;
-                          Wallet.triggerUpdates();
-                        }
-                      }
-                    )
-                  );
-
-                  // Get account balance
-                  batch.add(
-                    Token.balanceOf(
-                      token,
-                      Web3Service.coinbase,
-                      function (e, balance) {
-                        $scope.userTokens[token].balance = balance;
+                  Token.balanceOf(
+                    token,
+                    $scope.wallet.address,
+                    function (e, balance) {
+                      if ($scope.wallet.tokens[token]) {
+                        $scope.wallet.tokens[token].balance = balance;
                         Wallet.triggerUpdates();
                       }
-                    )
-                  );
+                    }
+                  )
+
+                  // Get account balance
+                  Token.balanceOf(
+                    token,
+                    Web3Service.coinbase,
+                    function (e, balance) {
+                      $scope.userTokens[token].balance = balance;
+                      Wallet.triggerUpdates();
+                    }
+                  )
                 }
               );
           }

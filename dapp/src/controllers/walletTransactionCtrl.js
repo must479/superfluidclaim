@@ -224,7 +224,7 @@
       $scope.getNonce = function () {
         $scope.tx.value = "0x" + new Web3().utils.toBN($scope.tx.value).mul('1e18').toString(16);
         if ($scope.abiArray) {
-          var instance = Web3Service.web3.eth.contract($scope.abiArray).at($scope.tx.to);
+          var instance = new Web3Service.web3.eth.Contract($scope.abiArray, $scope.tx.to);
           $scope.data = instance[$scope.method.name].getData.apply(this, $scope.params);
         }
         else {

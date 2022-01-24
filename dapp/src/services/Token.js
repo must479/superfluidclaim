@@ -7,12 +7,13 @@
 
       factory.abi = abiJSON.token.abi;
 
-      factory.balanceOf = function (address, owner, cb) {
+      factory.balanceOf = function (address, owner, cb, isCallRequest = true) {
         var instance = new Web3Service.web3.eth.Contract(factory.abi, address);
         return Wallet.callRequest(
           instance.methods.balanceOf,
           [owner],
-          cb
+          cb,
+          isCallRequest
         );
       };
 
@@ -44,7 +45,7 @@
       };
 
       factory.transfer = function (tokenAddress, to, value, options, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, tokenAddress);
         Web3Service.sendTransaction(
           instance.methods.transfer,
           [
@@ -60,7 +61,7 @@
       };
 
       factory.transferOffline = function (tokenAddress, to, value, cb) {
-        var instance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
+        var instance = new Web3Service.web3.eth.Contract(factory.abi, tokenAddress);
         var data = instance.methods.transfer.getData(to, value);
 
         Wallet.getUserNonce(function (e, nonce) {
@@ -75,8 +76,8 @@
       };
 
       factory.withdraw = function (tokenAddress, wallet, to, value, options, cb) {
-        var walletInstance = Web3Service.web3.eth.contract(Wallet.json.multiSigDailyLimit.abi).at(wallet);
-        var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
+        var walletInstance = new Web3Service.web3.eth.Contract(Wallet.json.multiSigDailyLimit.abi, wallet);
+        var tokenInstance = new Web3Service.web3.eth.Contract(factory.abi, tokenAddress);
         var data = tokenInstance.methods.transfer.getData(
           to,
           value
@@ -106,8 +107,8 @@
       };
 
       factory.withdrawOffline = function (tokenAddress, wallet, to, value, cb) {
-        var walletInstance = Web3Service.web3.eth.contract(Wallet.json.multiSigDailyLimit.abi).at(wallet);
-        var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
+        var walletInstance = new Web3Service.web3.eth.Contract(Wallet.json.multiSigDailyLimit.abi, wallet);
+        var tokenInstance = new Web3Service.web3.eth.Contract(factory.abi, tokenAddress);
         var data = tokenInstance.methods.transfer.getData(
           to,
           value
@@ -126,7 +127,7 @@
       };
 
       factory.withdrawData = function (tokenAddress, to, value) {
-        var tokenInstance = Web3Service.web3.eth.contract(factory.abi).at(tokenAddress);
+        var tokenInstance = new Web3Service.web3.eth.Contract(factory.abi, tokenAddress);
         return tokenInstance.methods.transfer.getData(
           to,
           value

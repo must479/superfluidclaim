@@ -15,7 +15,7 @@
       }
 
       $scope.setLimit = function () {
-        Wallet.updateLimit($scope.address, toBN($scope.limit).mul('1e18'), {onlySimulate: false}, function (e, tx){
+        Wallet.updateLimit($scope.address, toBN($scope.limit).mul(toBN(1e18)), {onlySimulate: false}, function (e, tx){
           if (e) {
             Utils.dangerAlert(e);
           }
@@ -30,7 +30,7 @@
       };
 
       $scope.sign = function () {
-        Wallet.signLimit($scope.address, toBN($scope.limit).mul('1e18'), function (e, tx) {
+        Wallet.signLimit($scope.address, toBN($scope.limit).mul(toBN(1e18)), function (e, tx) {
           if (e) {
             Utils.dangerAlert(e);
           }
@@ -42,7 +42,7 @@
       };
 
       $scope.getNonce = function () {
-        var data = Wallet.getUpdateLimitData($scope.address, toBN($scope.limit).mul('1e18'));
+        var data = Wallet.getUpdateLimitData($scope.address, toBN($scope.limit).mul(toBN(1e18)));
         Wallet.getNonce($scope.address, $scope.address, "0x0", data, function (e, nonce) {
           // Open modal
           $uibModalInstance.close();

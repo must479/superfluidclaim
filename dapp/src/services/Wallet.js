@@ -638,7 +638,7 @@
       };
 
       wallet.deployWithLimitFactory = function (owners, requiredConfirmations, limit, cb) {
-        var walletFactory = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimitFactory.abi).at(txDefault.walletFactoryAddress);
+        var walletFactory = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimitFactory.abi, txDefault.walletFactoryAddress);
         walletFactory
           .create
           .estimateGas(
@@ -671,7 +671,7 @@
       };
 
       wallet.deployWithLimitFactoryOffline = function (owners, requiredConfirmations, limit, cb) {
-        var factory = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimitFactory.abi).at(txDefault.walletFactoryAddress);
+        var factory = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimitFactory.abi, txDefault.walletFactoryAddress);
 
         var data = factory.create.getData(
           owners,
@@ -1063,7 +1063,7 @@
       **/
       wallet.updateLimit = function (address, limit, options, cb) {
         var instance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
-        var data = instance.changeDailyLimit.getData(
+        var data = instance.methods.changeDailyLimit.getData(
           limit,
           cb
         );
@@ -1074,7 +1074,7 @@
           }
           else {
             Web3Service.sendTransaction(
-              instance.submitTransaction,
+              instance.methods.submitTransaction,
               [
                 address,
                 "0x0",
@@ -1094,7 +1094,7 @@
       **/
       wallet.getUpdateLimitData = function (address, limit) {
         var instance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
-        return instance.changeDailyLimit.getData(limit);
+        return instance.methods.changeDailyLimit.getData(limit);
       };
 
       /**
@@ -1102,7 +1102,7 @@
       **/
       wallet.signLimit = function (address, limit, cb) {
         var instance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
-        var data = instance.changeDailyLimit.getData(
+        var data = instance.methods.changeDailyLimit.getData(
           limit,
           cb
         );
@@ -1113,7 +1113,7 @@
             cb(e);
           }
           else {
-            var mainData = instance.submitTransaction.getData(address, "0x0", data);
+            var mainData = instance.methods.submitTransaction.getData(address, "0x0", data);
             wallet.offlineTransaction(address, mainData, nonce, cb);
           }
         });
@@ -1142,7 +1142,7 @@
             cb(e);
           }
           else {
-            var mainData = instance.confirmTransaction.getData(txId);
+            var mainData = instance.methods.confirmTransaction.getData(txId);
             wallet.offlineTransaction(address, mainData, nonce, cb);
           }
         });
@@ -1153,13 +1153,13 @@
       */
       wallet.executeTransaction = function (address, txId, options, cb) {
         var instance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
-        instance.executeTransaction.estimateGas(txId, wallet.txDefaults(), function (e, gas) {
+        instance.methods.executeTransaction.estimateGas(txId, wallet.txDefaults(), function (e, gas) {
           if (e) {
             cb(e);
           }
           else {
             Web3Service.sendTransaction(
-              instance.executeTransaction,
+              instance.methods.executeTransaction,
               [
                 txId,
                 wallet.txDefaults({gas: Math.ceil(gas * 1.5)})
@@ -1182,7 +1182,7 @@
             cb(e);
           }
           else {
-            var mainData = instance.executeTransaction.getData(txId);
+            var mainData = instance.methods.executeTransaction.getData(txId);
             wallet.offlineTransaction(address, mainData, nonce, cb);
           }
         });
@@ -1225,7 +1225,7 @@
       wallet.revokeConfirmation = function (address, txId, options, cb) {
         var instance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
         Web3Service.sendTransaction(
-          instance.revokeConfirmation,
+          instance.methods.revokeConfirmation,
           [
             txId,
             wallet.txDefaults({gas: 300000})
@@ -1245,7 +1245,7 @@
             cb(e);
           }
           else {
-            var data = instance.revokeConfirmation.getData(txId);
+            var data = instance.methods.revokeConfirmation.getData(txId);
             wallet.offlineTransaction(address, data, nonce, cb);
           }
         });
@@ -1257,10 +1257,10 @@
       wallet.submitTransaction = function (address, tx, abi, method, params, options, cb) {
         var data = '0x0';
         if (abi && method) {
-          var instance = Web3Service.web3.eth.contract(abi).at(tx.to);
+          var instance = new Web3Service.web3.eth.Contract(abi, tx.to);
           data = instance[method].getData.apply(this, params);
         }
-        var walletInstance = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi).at(address);
+        var walletInstance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
         // Get nonce
         wallet.getTransactionCount(address, true, true, function (e, count) {
           if (e) {
@@ -1268,7 +1268,7 @@
           }
           else {
             // estimate gas
-            walletInstance.submitTransaction.estimateGas(
+            walletInstance.methods.submitTransaction.estimateGas(
               tx.to,
               tx.value,
               data,
@@ -1280,7 +1280,7 @@
                 }
                 else {
                   Web3Service.sendTransaction(
-                    walletInstance.submitTransaction,
+                    walletInstance.methods.submitTransaction,
                     [
                       tx.to,
                       tx.value,
@@ -1304,10 +1304,10 @@
       wallet.signTransaction = function (address, tx, abi, method, params, cb) {
         var data = '0x0';
         if (abi && method) {
-          var instance = Web3Service.web3.eth.contract(abi).at(tx.to);
+          var instance = new Web3Service.web3.eth.Contract(abi, tx.to);
           data = instance[method].getData.apply(this, params);
         }
-        var walletInstance = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi).at(address);
+        var walletInstance = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi, address);
         // Get nonce
         wallet.getUserNonce(function (e, nonce) {
           if (e) {
@@ -1317,7 +1317,7 @@
             // Don's show anything, user closed the modal
           }
           else {
-            var mainData = walletInstance.submitTransaction.getData(
+            var mainData = walletInstance.methods.submitTransaction.getData(
               tx.to,
               tx.value,
               data
