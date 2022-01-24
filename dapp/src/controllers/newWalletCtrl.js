@@ -3,6 +3,7 @@
     angular
     .module("multiSigWeb")
     .controller("newWalletCtrl", function ($scope, $uibModalInstance, Utils, Transaction, Wallet, Token, callback, Web3Service) {
+      const toBN = (num) => new Web3().utils.toBN(num);
 
       $scope.newOwner = {};
       $scope.owners = {};
@@ -20,7 +21,7 @@
       };
 
       $scope.deployWallet = function () {
-        Wallet.deployWithLimit(Object.keys($scope.owners), $scope.confirmations, new Web3().utils.toBN($scope.limit).mul('1e18'),
+        Wallet.deployWithLimit(Object.keys($scope.owners), $scope.confirmations, toBN($scope.limit).mul(toBN(1e18)),
           function (e, contract) {
             if (e) {
               Utils.dangerAlert(e);
@@ -45,7 +46,7 @@
       };
 
       $scope.deployOfflineWallet = function () {
-        Wallet.deployWithLimitOffline(Object.keys($scope.owners), $scope.confirmations, new Web3().utils.toBN($scope.limit).mul('1e18'),
+        Wallet.deployWithLimitOffline(Object.keys($scope.owners), $scope.confirmations, toBN($scope.limit).mul(toBN(1e18)),
         function (e, signed) {
           if (e) {
             Utils.dangerAlert(e);
@@ -58,7 +59,7 @@
       };
 
       $scope.deployFactoryWallet = function () {
-        Wallet.deployWithLimitFactory(Object.keys($scope.owners), $scope.confirmations, new Web3().utils.toBN($scope.limit).mul('1e18'),
+        Wallet.deployWithLimitFactory(Object.keys($scope.owners), $scope.confirmations, toBN($scope.limit).mul('1e18'),
           function (e, tx) {
             if (e) {
               Utils.dangerAlert(e);
@@ -84,7 +85,7 @@
       };
 
       $scope.deployFactoryWalletOffline = function () {
-        Wallet.deployWithLimitFactoryOffline(Object.keys($scope.owners), $scope.confirmations, new Web3().utils.toBN($scope.limit).mul('1e18'),
+        Wallet.deployWithLimitFactoryOffline(Object.keys($scope.owners), $scope.confirmations, toBN($scope.limit).mul('1e18'),
           function (e, signed) {
             if (e) {
               Utils.dangerAlert(e);

@@ -619,21 +619,19 @@
       };
 
       wallet.deployWithLimit = function (owners, requiredConfirmations, limit, cb) {
-        var MyContract = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi);
+        var MyContract = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi);
         var gasNeeded = 3000000;
 
-        Web3Service.configureGas({gas: gasNeeded, gasPrice: wallet.txParams.gasPrice}, function (gasOptions){
-          MyContract.new(
-            owners,
-            requiredConfirmations,
-            limit,
-            wallet.txDefaults({
-              data: wallet.json.multiSigDailyLimit.binHex,
-              gas: gasOptions.gas,
-              gasPrice: gasOptions.gasPrice
-            }),
-            cb
-          );
+        Web3Service.configureGas({gas: gasNeeded, gasPrice: wallet.txParams.gasPrice}, async function (gasOptions){
+          await MyContract.deploy({
+            data: wallet.json.multiSigDailyLimit.binHex,
+            arguments: [owners, requiredConfirmations, limit],
+          }).send({
+            from: Web3Service.coinbase,
+            gas: gasOptions.gas,
+            gasPrice: gasOptions.gasPrice,
+          });
+          cb();
         });
       };
 
@@ -695,7 +693,7 @@
 
       wallet.deployWithLimitOffline = function (owners, requiredConfirmations, limit, cb) {
         // Get Transaction Data
-        var MyContract = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi);
+        var MyContract = new Web3Service.web3.eth.Contract(wallet.json.multiSigDailyLimit.abi);
         var data = MyContract.new.getData(owners, requiredConfirmations, limit, {
           data: wallet.json.multiSigDailyLimit.binHex
         });
