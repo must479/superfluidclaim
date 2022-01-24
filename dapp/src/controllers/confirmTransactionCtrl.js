@@ -4,7 +4,8 @@
     .module("multiSigWeb")
     .controller("confirmTransactionCtrl", function ($scope, txId, address, Wallet, Transaction, $uibModalInstance, Utils) {
       $scope.send = function () {
-        Wallet.confirmTransaction(address, txId, {onlySimulate: false}, function (e, tx) {
+        const ethersBNTxId = new ethers.BigNumber.from(txId.toString());
+        Wallet.confirmTransaction(address, ethersBNTxId, {onlySimulate: false}, function (e, tx) {
           if (e) {
             Utils.dangerAlert(e);
           }
