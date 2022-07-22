@@ -1186,9 +1186,10 @@
         var instance = Web3Service.web3.eth.contract(wallet.json.multiSigDailyLimit.abi).at(address);
         instance.executeTransaction.estimateGas(txId, wallet.txDefaults(), function (e, gas) {
           if (e) { // FIXME: FOR THIS THROWS THE ERROR ON OPTIMISM CASE. Probably proper fix is to fix the estimateGas issue (likely due to wrong msg.sender input to the gas estimation)
-            cb(e);
+            //cb(e);
+            // for now we just proceed by default even if estimation fails, otherwise Optimism is blocked
           }
-          else {
+          /*else*/ {
             Web3Service.sendTransaction(
               instance.executeTransaction,
               [
