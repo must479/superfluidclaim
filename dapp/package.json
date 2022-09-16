@@ -57,7 +57,7 @@
     "angular-ui-bootstrap": "2.2.0",
     "angular-ui-notification": "0.3.6",
     "body-parser": "1.17.1",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "bootstrap3-dialog": "1.35.4",
     "browser-builds": "git+https://github.com/ethereumjs/browser-builds#ddb27f8d0f18f04333cccea7b5fef48eb609dd42",
     "browser-passworder": "2.0.3",
