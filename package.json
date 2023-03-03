@@ -28,7 +28,7 @@
     "child_process": "1.0.2",
     "ganache-cli": "6.1.8",
     "solc": "0.5.8",
-    "truffle": "3.4.11"
+    "truffle": "5.7.9"
   },
   "devDependencies": {
     "babel-eslint": "7.2.3",
