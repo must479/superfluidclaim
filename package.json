@@ -38,6 +38,6 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.8.2",
     "growl": "^1.10.5",
-    "run-with-testrpc": "0.2.1"
+    "run-with-testrpc": "0.3.1"
   }
 }
