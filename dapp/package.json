@@ -95,7 +95,7 @@
     "grunt-minified": "0.0.6",
     "grunt-npm-command": "0.1.2",
     "jshint": "2.9.5",
-    "terser": "^3.16.1"
+    "terser": "^4.8.1"
   },
   "build": {
     "appId": "pm.gnosis.wallet",
